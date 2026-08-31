@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "nome": "Garrafa Reutilizável",
+    "categoria": "Casa",
+    "preco": 49.9
+  },
+  {
+    "id": 2,
+    "nome": "Camiseta Sustentável",
+    "categoria": "Roupas",
+    "preco": 79.9
+  },
+  {
+    "id": 3,
+    "nome": "Carregador Solar",
+    "categoria": "Tecnologia",
+    "preco": 129.9
+  }
+]
