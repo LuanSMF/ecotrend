@@ -1,11 +1,18 @@
 import { useEffect,useState } from 'react'
 import './App.css'
+import carrinhosvg from './assets/icons/shopping-cart.svg'
+import lixosvg from './assets/icons/trash.svg'
+import maissvg from './assets/icons/plus.svg'
+import menossvg from './assets/icons/minus.svg'
 
 function App() {
 
   const[produtos,setProdutos] = useState([]);
   const[carregando,setCarregando] = useState(true);
   const[erro,setErro] = useState("");
+
+  const [carrinhoAberto, setCarrinhoAberto] = useState(false);
+
 
   useEffect(() => {
     async function carregaProdutos(){
@@ -106,35 +113,45 @@ function App() {
   return (
     <>
       <main>
-        <h1>Ecotrend</h1>
-        <p>Itens do carrinho: {carrinho.length}</p>
-        <p>Produtos sustentáveis para um futuro melhor.</p>
-        <div>
-          <button onClick={() => setCategoriaSelecionada("Todos")}>
-            Todos
-          </button>
-          <button onClick = {() => setCategoriaSelecionada("Casa")}>
-            Casa
-          </button>
-          <button onClick={() => setCategoriaSelecionada("Roupas")}>
-            Roupas
-          </button>
-          <button onClick={() => setCategoriaSelecionada("Tecnologia")}>
-            Tecnologia
-          </button>
-        </div>
+        <header>
+          <h1><span>Eco</span>trend</h1>
+          {/* <p>Produtos sustentáveis para um futuro melhor.</p> */}
+          <div>
+            <button onClick={() => setCategoriaSelecionada("Todos")}>
+              Todos
+            </button>
+            <button onClick = {() => setCategoriaSelecionada("Casa")}>
+              Casa
+            </button>
+            <button onClick={() => setCategoriaSelecionada("Roupas")}>
+              Roupas
+            </button>
+            <button onClick={() => setCategoriaSelecionada("Tecnologia")}>
+              Tecnologia
+            </button>
+          </div>
+          <div className="contador">
+  <button
+    id="mostrar"
+    onClick={() => setCarrinhoAberto(!carrinhoAberto)}
+  >
+    <img src={carrinhosvg} alt="Carrinho" />
+    {carrinho.length}
+  </button>
+</div>
+        </header>
+          <h2>Produtos</h2>
         <section>
-          <h2>Carrinho</h2>
           {produtosFiltrados.map((produto) =>(
           <article key={produto.id}>
-            <h2>{produto.nome}</h2>
+            <h3>{produto.nome}</h3>
+            <h4>R${produto.preco}</h4>
             <p>{produto.categoria}</p>
-            <p>{produto.preco}</p>
             <button onClick={() => AdicionarAoCarrinho(produto)}>Adicionar ao carrinho</button>
           </article>
         ))}
         </section>
-        <aside>
+        <aside  data-aberto={carrinhoAberto}>
           <h2>Carrinho</h2>
           {carrinho.length === 0?(
             <p>O carrinho está vazio.</p>
@@ -143,15 +160,15 @@ function App() {
               <p>Total: {totalCarrinho.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}</p>
               {carrinho.map((item,index)=>(
                 <li key={item.id}>
-                {item.nome} — Quantidade: {item.quantidade}
-                  <button onClick={() => removerDoCarrinho(index)}>
-                    Remover
-                  </button>
-                  <button onClick={() => adicionarMaisUm(index)}>
-                    +
+                <span><strong>{item.nome}</strong> — Quantidade: <strong>{item.quantidade}</strong></span>
+                <button onClick={() => adicionarMaisUm(index)}>
+                    <img src={maissvg} />
                   </button>
                   <button onClick={() => removerMaisUm(index)}>
-                    -
+                    <img src={menossvg} />
+                  </button>
+                  <button onClick={() => removerDoCarrinho(index)}>
+                    <img src={lixosvg} />
                   </button>
                 </li>
               ))}
