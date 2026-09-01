@@ -6,6 +6,8 @@ function App() {
   const[produtos,setProdutos] = useState([]);
   const[carregando,setCarregando] = useState(true);
   const[erro,setErro] = useState("");
+  const [processando, setProcessando] = useState(false);
+  const [mensagem, setMensagem] = useState("");
 
   useEffect(() => {
     async function carregaProdutos(){
@@ -101,6 +103,44 @@ function App() {
     setCarrinho(carrinhoAtualizado);
   }
 
+  function processarPedido(){
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const compraAprovada = Math.random() >0.2;
+
+        if(compraAprovada){
+          resolve("Compra finalizada com sucesso");
+        }else{
+          reject(new Error("Não foi possível finalizara compra."));
+        }
+      },2000);
+    })
+  }
+
+  async function finalizarCompra(){
+    if(carrinho.length === 0){
+      setMensagem("Adicione pelo menos um produto ao carrinho.");
+      return;
+    }
+    setProcessando(true);
+    setMensagem("");
+
+    try{
+      const resultado = await processarPedido();
+
+      setMensagem(resultado);
+      setCarrinho([]);
+
+      setTimeout(() =>{
+        setMensagem("");
+      },3000);
+    }catch (erroCapturado){
+      setMensagem(erroCapturado.message);
+    } finally{
+      setProcessando(false);
+    }
+  }
+
 
 
   return (
@@ -124,8 +164,16 @@ function App() {
           </button>
         </div>
         <section>
-          <h2>Carrinho</h2>
-          {produtosFiltrados.map((produto) =>(
+          <h2>Produtos</h2>
+          {carregando && (
+            <div className='loading'>
+              <div className='spinner'></div>
+              <p>Carregando produtos...</p>
+            </div>
+          )}
+          {erro && <p>{erro}</p>}
+
+          {!carregando && !erro && produtosFiltrados.map((produto) => (
           <article key={produto.id}>
             <h2>{produto.nome}</h2>
             <p>{produto.categoria}</p>
@@ -137,7 +185,7 @@ function App() {
         <aside>
           <h2>Carrinho</h2>
           {carrinho.length === 0?(
-            <p>O carrinho está vazio.</p>
+            !mensagem &&<p>O carrinho está vazio.</p>
           ):(
             <ul>
               <p>Total: {totalCarrinho.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}</p>
@@ -150,14 +198,20 @@ function App() {
                   <button onClick={() => adicionarMaisUm(index)}>
                     +
                   </button>
+                  {item.quantidade > 1 &&(
                   <button onClick={() => removerMaisUm(index)}>
                     -
                   </button>
+                  )}
                 </li>
               ))}
             </ul>
           )}
         </aside>
+        {carrinho.length > 0 &&(
+          <button onClick={finalizarCompra} disabled={processando}>{processando ? "Processando...":"Finalizar compra"}</button>
+        )}
+        {mensagem && <p>{mensagem}</p>}
       </main>
     </>
   )
