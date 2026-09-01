@@ -1,4 +1,8 @@
 import { useEffect,useState } from 'react'
+import carrinhosvg from './assets/icons/shopping-cart.svg'
+import lixosvg from './assets/icons/trash.svg'
+import maissvg from './assets/icons/plus.svg'
+import menossvg from './assets/icons/minus.svg'
 import './App.css'
 
 function App() {
@@ -8,6 +12,7 @@ function App() {
   const[erro,setErro] = useState("");
   const [processando, setProcessando] = useState(false);
   const [mensagem, setMensagem] = useState("");
+  const [carrinhoAberto, setCarrinhoAberto] = useState(false);
 
   useEffect(() => {
     async function carregaProdutos(){
@@ -146,9 +151,9 @@ function App() {
   return (
     <>
       <main>
-        <h1>Ecotrend</h1>
-        <p>Itens do carrinho: {carrinho.length}</p>
-        <p>Produtos sustentáveis para um futuro melhor.</p>
+        <header>
+        <h1><span>Ecotrend</span></h1>
+        {/* <p>Produtos sustentáveis para um futuro melhor.</p> */}
         <div>
           <button onClick={() => setCategoriaSelecionada("Todos")}>
             Todos
@@ -163,8 +168,18 @@ function App() {
             Tecnologia
           </button>
         </div>
-        <section>
+        <div className="contador">
+  <button
+    id="mostrar"
+    onClick={() => setCarrinhoAberto(!carrinhoAberto)}
+  >
+    <img src={carrinhosvg} alt="Carrinho" />
+    {carrinho.length}
+  </button>
+</div>
+        </header>
           <h2>Produtos</h2>
+        <section>
           {carregando && (
             <div className='loading'>
               <div className='spinner'></div>
@@ -175,32 +190,33 @@ function App() {
 
           {!carregando && !erro && produtosFiltrados.map((produto) => (
           <article key={produto.id}>
-            <h2>{produto.nome}</h2>
-            <p>{produto.categoria}</p>
+            <h3>{produto.nome}</h3>
+            <h4>{produto.categoria}</h4>
             <p>{produto.preco}</p>
             <button onClick={() => AdicionarAoCarrinho(produto)}>Adicionar ao carrinho</button>
           </article>
         ))}
         </section>
-        <aside>
+        <aside data-aberto={carrinhoAberto}>
           <h2>Carrinho</h2>
           {carrinho.length === 0?(
             !mensagem &&<p>O carrinho está vazio.</p>
           ):(
             <ul>
+              <p>Itens do carrinho: {carrinho.length}</p>
               <p>Total: {totalCarrinho.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}</p>
               {carrinho.map((item,index)=>(
                 <li key={item.id}>
-                {item.nome} — Quantidade: {item.quantidade}
+                <span><strong>{item.nome}</strong> — Quantidade: <strong>{item.quantidade}</strong></span>
                   <button onClick={() => removerDoCarrinho(index)}>
-                    Remover
+                    <img src={lixosvg} />
                   </button>
                   <button onClick={() => adicionarMaisUm(index)}>
-                    +
+                    <img src={maissvg} />
                   </button>
                   {item.quantidade > 1 &&(
                   <button onClick={() => removerMaisUm(index)}>
-                    -
+                    <img src={menossvg} />
                   </button>
                   )}
                 </li>
