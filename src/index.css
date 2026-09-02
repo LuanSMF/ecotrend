@@ -208,3 +208,57 @@ aside li button:last-of-type {
 aside li button:last-of-type:hover {
     background-color: #FEE2E2;
 }
+
+
+.botao-finalizar {
+  width: 100%;
+  margin-top: 24px;
+  padding: 14px 20px;
+
+  background-color: #2864eb;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.botao-finalizar:hover {
+  background-color: #1e4fc2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(40, 100, 235, 0.25);
+}
+
+.botao-finalizar:active {
+  transform: translateY(0);
+}
+
+.botao-finalizar:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.mensagem-compra {
+  margin-top: 16px;
+  padding: 14px 16px;
+
+  background-color: #dcfce7;
+  color: #166534;
+
+  border: 1px solid #86efac;
+  border-radius: 10px;
+
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}

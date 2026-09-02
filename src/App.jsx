@@ -221,13 +221,17 @@ function App() {
                   )}
                 </li>
               ))}
+              {carrinho.length > 0 && (
+                <button className="botao-finalizar" onClick={finalizarCompra} disabled={processando}>
+                  {processando ? "Processando..." : "Finalizar compra"}
+                </button>
+                )}
             </ul>
           )}
+          {mensagem && (
+                  <p className="mensagem-compra">{mensagem}</p>
+                )}
         </aside>
-        {carrinho.length > 0 &&(
-          <button onClick={finalizarCompra} disabled={processando}>{processando ? "Processando...":"Finalizar compra"}</button>
-        )}
-        {mensagem && <p>{mensagem}</p>}
       </main>
     </>
   )
