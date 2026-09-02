@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     async function carregaProdutos(){
       try{
-        const resposta= await fetch("/produtos.json");
+        const resposta= await fetch("https://raw.githubusercontent.com/LuanSMF/ecotrend/main/public/produtos.json");
 
         if(!resposta.ok){
           throw new Error("Não foi possível carregar os produtos.");
@@ -116,7 +116,7 @@ function App() {
         if(compraAprovada){
           resolve("Compra finalizada com sucesso");
         }else{
-          reject(new Error("Não foi possível finalizara compra."));
+          reject(new Error("Não foi possível finalizar a compra."));
         }
       },2000);
     })
